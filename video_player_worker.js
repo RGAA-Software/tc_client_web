@@ -94,7 +94,7 @@ function start({ prefix, rendererName, canvas }) {
         }
     });
 
-    protobuf.load(["rgaa_message/messages.proto"], function (err, root) {
+    protobuf.load(["tc_message.proto"], function (err, root) {
         if (err != null) {
             console.log("load protobuf failed : ", err);
             return;
@@ -110,21 +110,16 @@ function start({ prefix, rendererName, canvas }) {
 
         streamSocket.onmessage = (event) => {
             let data = new Uint8Array(event.data);
-            let decodedData = root.nested.rgaa.Message.decode(data);
+            let decodedData = root.nested.tc.Message.decode(data);
             //console.log("frame : ", decodedData);
 
-            if (decodedData.type === root.nested.rgaa.MessageType.kConfigSync) {
-                console.log("config sync : ", decodedData.configSync.type);
-                return;
-            }
-
-            if (decodedData.type === root.nested.rgaa.MessageType.kVideoFrame) {
+            if (decodedData.type === root.nested.tc.MessageType.kVideoFrame) {
             
-                let isH265 = decodedData.videoFrame.type === root.nested.rgaa.VideoType.kH265;
-                let isH264 = decodedData.videoFrame.type === root.nested.rgaa.VideoType.kH264;
-                let isVp9 = decodedData.videoFrame.type === root.nested.rgaa.VideoType.kVp9;
+                let isH265 = decodedData.videoFrame.type === root.nested.tc.VideoType.kNetH265;
+                let isH264 = decodedData.videoFrame.type === root.nested.tc.VideoType.kNetH264;
+                let isVp9 = decodedData.videoFrame.type === root.nested.tc.VideoType.kNetVp9;
 
-                //console.log(isH265, isH264, isVp9);
+                console.log("type: ", decodedData.videoFrame.type, isH265, isH264, isVp9);
 
                 if (!isDecoderInited) {
                     //codec: "hev1.1.6.L150.90",
