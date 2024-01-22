@@ -1,0 +1,6 @@
+[submodule "protocal"]
+	path = protocal
+	url = git@git.dolit.cn:product/cloudapp/protocal.git
+[submodule "rgaa_message"]
+	path = rgaa_message
+	url = git@github.com:RGAA-Software/rgaa_message.git
